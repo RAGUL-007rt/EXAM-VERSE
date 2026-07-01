@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ExamBoard India — Every Competitive Exam, One Board</title>
+<meta name="description" content="A single, verified board of every major Indian competitive exam — UPSC, SSC, Banking, Railways, Defence, State PSC, Entrance and Teaching exams — with dates, eligibility and official links.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#EEE8DA;
+    --paper-dim:#E4DDC8;
+    --card:#FBF9F3;
+    --ink:#16233A;
+    --ink-soft:#4B5A73;
+    --board:#1B2430;
+    --board-line:#2C3648;
+    --amber:#E8A33D;
+    --amber-soft:#F0C482;
+    --red:#B23A2E;
+    --teal:#2F6B5E;
+    --slate:#5B6B83;
+    --line: rgba(22,35,58,0.15);
+    --line-strong: rgba(22,35,58,0.28);
+    --font-display:'Fraunces', Georgia, serif;
+    --font-body:'IBM Plex Sans', -apple-system, Segoe UI, sans-serif;
+    --font-mono:'IBM Plex Mono', 'Courier New', monospace;
+    --radius: 3px;
+  }
+ 
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    *{animation-duration:0.01ms !important; transition-duration:0.01ms !important;}
+  }
+ 
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--font-body);
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+ 
+  a{color:inherit;}
+  button{font-family:inherit;}
+ 
+  :focus-visible{
+    outline:2px solid var(--red);
+    outline-offset:2px;
+  }
+ 
+  .wrap{
+    max-width:1120px;
+    margin:0 auto;
+    padding:0 24px;
+  }
+ 
+  /* ---------- HEADER ---------- */
+  .site-header{
+    position:sticky; top:0; z-index:40;
+    background:var(--paper);
+    border-bottom:1px solid var(--line-strong);
+  }
+  .site-header .wrap{
+    display:flex; align-items:center; justify-content:space-between;
+    padding-top:16px; padding-bottom:16px;
+    gap:16px;
+  }
+  .brand{display:flex; align-items:center; gap:10px; text-decoration:none;}
+  .brand-mark{
+    width:34px; height:34px; flex:none;
+    background:var(--board);
+    border-radius:2px;
+    position:relative;
+    display:grid; place-items:center;
+  }
+  .brand-mark::before, .brand-mark::after{
+    content:""; position:absolute; left:5px; right:5px; height:1px; background:var(--board-line);
+  }
+  .brand-mark::before{ top:11px; }
+  .brand-mark::after{ top:22px; }
+  .brand-mark span{
+    font-family:var(--font-mono); color:var(--amber); font-size:15px; font-weight:600; letter-spacing:0.5px;
+  }
+  .brand-text{display:flex; flex-direction:column; line-height:1.15;}
+  .brand-text b{font-family:var(--font-display); font-size:19px; font-weight:600;}
+  .brand-text small{font-family:var(--font-mono); font-size:10.5px; letter-spacing:0.08em; color:var(--ink-soft); text-transform:uppercase;}
+  .verified-chip{
+    font-family:var(--font-mono); font-size:11.5px; color:var(--ink-soft);
+    border:1px solid var(--line-strong); border-radius:20px;
+    padding:6px 12px; white-space:nowrap;
+  }
+  .verified-chip b{color:var(--ink); font-weight:600;}
+  @media (max-width:640px){ .verified-chip{display:none;} }
+ 
+  /* ---------- HERO ---------- */
+  .hero{
+    background:var(--board);
+    color:#EDE7D8;
+    padding:52px 0 40px;
+    overflow:hidden;
+  }
+  .hero .eyebrow{
+    font-family:var(--font-mono); font-size:12px; letter-spacing:0.14em; text-transform:uppercase;
+    color:var(--amber); margin:0 0 14px;
+  }
+  .hero h1{
+    font-family:var(--font-display); font-weight:600;
+    font-size:clamp(32px, 5vw, 52px);
+    line-height:1.08; letter-spacing:-0.01em;
+    margin:0 0 18px; max-width:16ch;
+  }
+  .hero p.lede{
+    font-size:16.5px; color:#C9C2AE; max-width:52ch; margin:0 0 30px;
+  }
+  .hero-stats{
+    display:flex; gap:28px; flex-wrap:wrap; margin-bottom:36px;
+  }
+  .hero-stats div{font-family:var(--font-mono); font-size:12px; color:#9BA6BA;}
+  .hero-stats div b{display:block; font-family:var(--font-display); font-size:26px; color:var(--amber-soft); font-weight:600;}
+ 
+  .ticker-label{
+    font-family:var(--font-mono); font-size:11.5px; letter-spacing:0.1em; text-transform:uppercase;
+    color:#8891A3; margin:0 0 10px; display:flex; align-items:center; gap:8px;
+  }
+  .ticker-label .dot{width:7px; height:7px; border-radius:50%; background:var(--amber); animation:pulse 1.8s infinite;}
+  @keyframes pulse{ 0%,100%{opacity:1;} 50%{opacity:0.35;} }
+ 
+  .ticker{
+    display:flex; gap:12px; overflow-x:auto; padding-bottom:8px; margin:0 -2px;
+    scrollbar-width:thin;
+  }
+  .ticker::-webkit-scrollbar{height:6px;}
+  .ticker::-webkit-scrollbar-thumb{background:var(--board-line); border-radius:4px;}
+  .flap{
+    flex:none; width:206px;
+    background:#212B3B;
+    border:1px solid var(--board-line);
+    border-radius:2px;
+    padding:12px 14px;
+    position:relative;
+  }
+  .flap::after{
+    content:""; position:absolute; left:0; right:0; top:50%; height:1px; background:var(--board);
+  }
+  .flap .fl-cat{font-family:var(--font-mono); font-size:10px; letter-spacing:0.1em; text-transform:uppercase; color:var(--amber); margin-bottom:6px;}
+  .flap .fl-name{font-size:14px; font-weight:600; color:#F1ECDE; margin-bottom:10px; min-height:36px;}
+  .flap .fl-date{font-family:var(--font-mono); font-size:12.5px; color:#D8D2C0;}
+  .flap .fl-status{font-family:var(--font-mono); font-size:10.5px; margin-top:4px;}
+  .fl-status.st-open{color:#6FD6BC;}
+  .fl-status.st-closing{color:#F0958A;}
+  .fl-status.st-upcoming{color:var(--amber-soft);}
+ 
+  /* ---------- CONTROLS ---------- */
+  .controls{
+    position:sticky; top:67px; z-index:30;
+    background:var(--paper); border-bottom:1px solid var(--line-strong);
+    padding:16px 0;
+  }
+  .controls .wrap{display:flex; flex-direction:column; gap:12px;}
+  .search-row{display:flex; gap:10px;}
+  .search-box{
+    flex:1; position:relative;
+    font-family:var(--font-mono);
+  }
+  .search-box input{
+    width:100%; padding:11px 14px 11px 34px;
+    border:1px solid var(--line-strong); border-radius:2px;
+    background:var(--card); color:var(--ink);
+    font-family:var(--font-mono); font-size:13.5px;
+  }
+  .search-box svg{position:absolute; left:11px; top:50%; transform:translateY(-50%); width:15px; height:15px; opacity:0.55;}
+  .chips{display:flex; gap:8px; flex-wrap:wrap; overflow-x:auto; padding-bottom:2px;}
+  .chip{
+    font-family:var(--font-mono); font-size:12px; letter-spacing:0.02em;
+    padding:8px 13px; border-radius:20px; border:1px solid var(--line-strong);
+    background:transparent; color:var(--ink-soft); cursor:pointer; white-space:nowrap;
+    transition:background 0.15s, color 0.15s, border-color 0.15s;
+  }
+  .chip:hover{border-color:var(--ink); color:var(--ink);}
+  .chip.active{background:var(--ink); border-color:var(--ink); color:var(--paper);}
+ 
+  /* ---------- BOARD / SECTIONS ---------- */
+  .board{padding:44px 0 20px;}
+  .cat-section{margin-bottom:46px;}
+  .cat-head{
+    display:flex; align-items:baseline; gap:14px; margin-bottom:16px;
+    border-bottom:2px solid var(--ink); padding-bottom:10px;
+  }
+  .cat-head .cat-code{
+    font-family:var(--font-mono); font-size:12px; background:var(--ink); color:var(--paper);
+    padding:3px 8px; border-radius:2px; letter-spacing:0.05em;
+  }
+  .cat-head h2{font-family:var(--font-display); font-size:22px; font-weight:600; margin:0;}
+  .cat-head .cat-blurb{font-size:13px; color:var(--ink-soft); margin-left:auto; display:none;}
+  @media(min-width:760px){ .cat-head .cat-blurb{display:block;} }
+ 
+  .exam-list{display:flex; flex-direction:column; gap:10px;}
+ 
+  .exam-card{
+    background:var(--card);
+    border:1px solid var(--line-strong);
+    border-radius:var(--radius);
+    overflow:hidden;
+  }
+  .exam-row{
+    display:flex; align-items:center; gap:16px;
+    padding:15px 16px; cursor:pointer;
+  }
+  .exam-stamp{
+    flex:none; width:52px; height:52px;
+    border:1.5px solid var(--ink); border-radius:50%;
+    display:grid; place-items:center;
+    font-family:var(--font-mono); font-weight:600; font-size:12.5px;
+    color:var(--ink); text-align:center; line-height:1.1;
+    transform:rotate(-4deg);
+  }
+  .exam-main{flex:1; min-width:0;}
+  .exam-main .ex-name{font-size:15.5px; font-weight:600; margin:0 0 3px;}
+  .exam-main .ex-body{font-size:12.5px; color:var(--ink-soft); margin:0;}
+  .exam-meta{
+    flex:none; display:flex; flex-direction:column; align-items:flex-end; gap:6px;
+    text-align:right;
+  }
+  .ex-date{font-family:var(--font-mono); font-size:12.5px; color:var(--ink);}
+  .badge{
+    font-family:var(--font-mono); font-size:10.5px; letter-spacing:0.04em;
+    padding:3px 9px; border-radius:20px; white-space:nowrap;
+  }
+  .badge.st-open{background:rgba(47,107,94,0.13); color:var(--teal);}
+  .badge.st-closing{background:rgba(178,58,46,0.12); color:var(--red);}
+  .badge.st-upcoming{background:rgba(232,163,61,0.18); color:#9A6414;}
+  .badge.st-expected{background:rgba(91,107,131,0.14); color:var(--slate);}
+  .badge.st-result{background:rgba(91,107,131,0.14); color:var(--slate);}
+ 
+  .chevron{
+    flex:none; width:20px; height:20px; color:var(--ink-soft);
+    transition:transform 0.18s;
+  }
+  .exam-card.open .chevron{transform:rotate(180deg);}
+ 
+  .exam-detail{
+    max-height:0; overflow:hidden; transition:max-height 0.22s ease;
+    border-top:1px dashed var(--line-strong);
+  }
+  .exam-card.open .exam-detail{ /* max-height set inline by JS */ }
+  .exam-detail-inner{padding:18px 20px 22px 20px; display:grid; gap:18px; grid-template-columns:1fr; }
+  @media(min-width:680px){ .exam-detail-inner{grid-template-columns:1.3fr 1fr;} }
+ 
+  .detail-block h4{
+    font-family:var(--font-mono); font-size:11px; letter-spacing:0.09em; text-transform:uppercase;
+    color:var(--ink-soft); margin:0 0 8px;
+  }
+  .detail-block p{margin:0; font-size:13.5px; color:var(--ink); line-height:1.55;}
+  .date-table{width:100%; border-collapse:collapse; font-size:13px;}
+  .date-table td{padding:6px 0; border-bottom:1px solid var(--line); vertical-align:top;}
+  .date-table td:first-child{color:var(--ink-soft); width:44%; padding-right:10px;}
+  .date-table td:last-child{font-family:var(--font-mono); font-size:12.5px;}
+  .date-table tr:last-child td{border-bottom:none;}
+ 
+  .detail-foot{
+    display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;
+    grid-column:1/-1; border-top:1px solid var(--line); padding-top:14px;
+  }
+  .fee-note{font-family:var(--font-mono); font-size:12px; color:var(--ink-soft);}
+  .official-link{
+    display:inline-flex; align-items:center; gap:7px;
+    background:var(--ink); color:var(--paper); text-decoration:none;
+    font-family:var(--font-mono); font-size:12.5px; font-weight:500;
+    padding:9px 16px; border-radius:2px;
+  }
+  .official-link:hover{background:#0E1728;}
+  .official-link svg{width:13px; height:13px;}
+ 
+  .empty-state{
+    text-align:center; padding:60px 20px; color:var(--ink-soft); font-family:var(--font-mono); font-size:13.5px;
+  }
+ 
+  /* ---------- FOOTER ---------- */
+  footer{
+    background:var(--board); color:#B9C0CE;
+    padding:40px 0 34px; margin-top:20px;
+  }
+  footer .wrap{display:grid; gap:26px; grid-template-columns:1fr;}
+  @media(min-width:760px){ footer .wrap{grid-template-columns:1.4fr 1fr;} }
+  footer h3{font-family:var(--font-display); color:#F1ECDE; font-size:18px; margin:0 0 10px;}
+  footer p{font-size:13px; line-height:1.65; margin:0 0 10px; color:#98A2B5;}
+  footer .cats{display:flex; flex-wrap:wrap; gap:8px;}
+  footer .cats a{
+    font-family:var(--font-mono); font-size:11.5px; color:#C9C2AE; text-decoration:none;
+    border:1px solid var(--board-line); padding:6px 11px; border-radius:16px;
+  }
+  footer .cats a:hover{border-color:var(--amber); color:var(--amber-soft);}
+  footer .fine{
+    font-family:var(--font-mono); font-size:11px; color:#6C7789; margin-top:22px; border-top:1px solid var(--board-line); padding-top:16px;
+  }
+</style>
+</head>
+<body>
+ 
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="#top">
+      <div class="brand-mark"><span>EB</span></div>
+      <div class="brand-text">
+        <b>ExamBoard</b>
+        <small>India · Competitive Exams</small>
+      </div>
+    </a>
+    <div class="verified-chip">Verified <b>1 Jul 2026</b></div>
+  </div>
+</header>
+ 
+<section class="hero" id="top">
+  <div class="wrap">
+    <p class="eyebrow">One board · every exam authority</p>
+    <h1>Every competitive exam in India. One board.</h1>
+    <p class="lede">UPSC, SSC, Banking, Railways, Defence, State PSC, entrance and teaching exams — dates, eligibility and the real official link, checked against each authority's own notification.</p>
+    <div class="hero-stats">
+      <div><b id="statExams">—</b>exams tracked</div>
+      <div><b id="statCats">8</b>categories</div>
+      <div><b>0</b>ads, ever</div>
+    </div>
+    <p class="ticker-label"><span class="dot"></span>Departing soon</p>
+    <div class="ticker" id="ticker"></div>
+  </div>
+</section>
+ 
+<section class="controls">
+  <div class="wrap">
+    <div class="search-row">
+      <div class="search-box">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" id="searchInput" placeholder="Search by exam name or authority — e.g. SSC, TNPSC, JEE" autocomplete="off">
+      </div>
+    </div>
+    <div class="chips" id="chips"></div>
+  </div>
+</section>
+ 
+<main class="board wrap" id="board"></main>
+ 
+<footer>
+  <div class="wrap">
+    <div>
+      <h3>Confirm before you act</h3>
+      <p>Every date on this board was checked against the exam authority's own notification as of <strong>1 July 2026</strong>. Exam bodies reschedule constantly — treat this as a starting point, and confirm anything you're acting on (deadlines, fees, centres) on the official site linked in each card.</p>
+      <p>ExamBoard doesn't accept applications, doesn't charge fees, and isn't affiliated with any exam authority. It's a directory, not a portal.</p>
+    </div>
+    <div>
+      <h3>Jump to a category</h3>
+      <div class="cats" id="footCats"></div>
+    </div>
+  </div>
+  <div class="wrap fine">Built as a reference directory. Vacancy counts, fees and dates are provisional until each authority's detailed notification confirms them.</div>
+</footer>
+ 
+<script>
+/* ============================= DATA ============================= */
+const CATEGORIES = [
+  { id:'upsc',     code:'UPSC', label:'UPSC & Civil Services',      blurb:'National Group A & B services' },
+  { id:'ssc',      code:'SSC',  label:'SSC',                        blurb:'Central govt Group B & C' },
+  { id:'banking',  code:'BNK',  label:'Banking',                    blurb:'Public sector bank recruitment' },
+  { id:'railways', code:'RLY',  label:'Railways',                   blurb:'Indian Railways (RRB)' },
+  { id:'defence',  code:'DEF',  label:'Defence',                    blurb:'Army, Navy, Air Force officer entry' },
+  { id:'state',    code:'SPSC', label:'State PSC — Tamil Nadu',     blurb:'TNPSC civil services' },
+  { id:'entrance', code:'ENT',  label:'Entrance & Academic',        blurb:'Engineering, medical, law, management, MBA' },
+  { id:'teaching', code:'TCH',  label:'Teaching',                   blurb:'Teacher eligibility tests' },
+];
+ 
+const EXAMS = [
+  {
+    id:'upsc-cse', category:'upsc', stamp:'CSE',
+    name:'UPSC Civil Services Examination', body:'Union Public Service Commission (UPSC)',
+    level:'National', posts:'IAS, IPS, IFS & other Group A / B central services',
+    vacancies:'933 vacancies (2026 cycle)',
+    eligibility:"Bachelor's degree from a recognised university (final-year candidates may apply provisionally). Age 21–32 as of 1 Aug 2026, with relaxation for reserved categories. Up to 6 attempts for General, 9 for OBC, unlimited for SC/ST.",
+    dates:[['Notification released','4 Feb 2026'],['Prelims','24 May 2026 — held'],['Mains','From 21 Aug 2026']],
+    status:'upcoming', statusLabel:'Mains: 21 Aug 2026',
+    fee:'₹100 (Gen/OBC/EWS male) · exempt for women, SC/ST/PwBD',
+    link:'https://upsc.gov.in'
+  },
+  {
+    id:'upsc-nda', category:'defence', stamp:'NDA',
+    name:'NDA & NA Examination (2)', body:'Union Public Service Commission (UPSC)',
+    level:'National', posts:'National Defence Academy — Army, Navy, Air Force wings',
+    vacancies:'Announced with each notification',
+    eligibility:'Unmarried candidates, 16½–19½ years. 12th pass (Army wing) or 12th with Physics & Maths (Navy/Air Force wing). Written exam (Maths + GAT) followed by SSB interview and medical.',
+    dates:[['Notification released','20 May 2026'],['Written exam','13 Sep 2026']],
+    status:'upcoming', statusLabel:'Exam: 13 Sep 2026',
+    fee:'₹100 (exempt for SC/ST candidates)',
+    link:'https://upsc.gov.in'
+  },
+  {
+    id:'upsc-cds', category:'defence', stamp:'CDS',
+    name:'Combined Defence Services Examination (2)', body:'Union Public Service Commission (UPSC)',
+    level:'National', posts:'Indian Military Academy, Naval Academy, Air Force Academy, Officers Training Academy',
+    vacancies:'Announced with each notification',
+    eligibility:"Graduation degree (engineering degree for Naval Academy; Physics & Maths at 10+2 or BE for Air Force Academy). Age band varies by academy, roughly 19–24 years. Male and female candidates both eligible — women only for OTA.",
+    dates:[['Notification released','20 May 2026'],['Applications closed','9 Jun 2026'],['Written exam','13 Sep 2026 — same day as NDA']],
+    status:'upcoming', statusLabel:'Exam: 13 Sep 2026',
+    fee:'₹200 (exempt for SC/ST/women)',
+    link:'https://upsc.gov.in'
+  },
+  {
+    id:'ssc-cgl', category:'ssc', stamp:'CGL',
+    name:'SSC Combined Graduate Level Examination', body:'Staff Selection Commission (SSC)',
+    level:'National', posts:'Group B & C posts — Income Tax, CBI, Central Excise, Customs and more',
+    vacancies:'12,256 vacancies (2026 cycle)',
+    eligibility:"Bachelor's degree in any discipline from a recognised university (specific posts need Statistics/Maths background). Age 18–32 as of 1 Aug 2026, varies by post.",
+    dates:[['Notification released','21 May 2026'],['Applications closed','25 Jun 2026 (extended)'],['Tier 1 (CBT)','Aug–Sep 2026'],['Tier 2','Dec 2026']],
+    status:'upcoming', statusLabel:'Tier 1: Aug–Sep 2026',
+    fee:'₹100 · exempt for women, SC/ST, PwBD, ex-servicemen',
+    link:'https://ssc.gov.in'
+  },
+  {
+    id:'ssc-chsl', category:'ssc', stamp:'CHSL',
+    name:'SSC Combined Higher Secondary Level Examination', body:'Staff Selection Commission (SSC)',
+    level:'National', posts:'Lower Division Clerk, Junior Secretariat Assistant, Data Entry Operator, Postal Assistant',
+    vacancies:'3,000+ expected (3,522 in the 2025 cycle)',
+    eligibility:'12th pass (10+2) from a recognised board. Age 18–27, with standard reserved-category relaxation.',
+    dates:[['Notification','Expected shortly (delayed from Apr 2026)'],['Tier 1 (CBT)','Jul–Sep 2026 (tentative)']],
+    status:'expected', statusLabel:'Notification expected soon',
+    fee:'₹100 · exempt for women & reserved categories',
+    link:'https://ssc.gov.in'
+  },
+  {
+    id:'ibps-po', category:'banking', stamp:'PO',
+    name:'IBPS PO / Management Trainee (CRP-XVI)', body:'Institute of Banking Personnel Selection (IBPS)',
+    level:'National', posts:'Probationary Officer across 11 public sector banks',
+    vacancies:'6,715 vacancies',
+    eligibility:'Graduation in any discipline from a recognised university. Age 20–30. Selection: Prelims → Mains → Interview.',
+    dates:[['Notification released','30 Jun 2026'],['Registration','1 Jul – 21 Jul 2026'],['Prelims','22–23 Aug 2026'],['Mains','4 Oct 2026']],
+    status:'open', statusLabel:'Applications open · closes 21 Jul',
+    fee:'₹850 (Gen/OBC) · ₹175 (SC/ST/PwBD)',
+    link:'https://www.ibps.in'
+  },
+  {
+    id:'ibps-clerk', category:'banking', stamp:'CLK',
+    name:'IBPS Clerk — Customer Service Associate (CRP-XV)', body:'Institute of Banking Personnel Selection (IBPS)',
+    level:'National', posts:'Clerical cadre across 11 public sector banks',
+    vacancies:'To be announced with detailed notification',
+    eligibility:'Graduation in any discipline. Basic computer knowledge required. No interview — selection is on Mains marks alone.',
+    dates:[['Notification','Expected Aug 2026'],['Prelims','10–11 Oct 2026'],['Mains','27 Dec 2026']],
+    status:'expected', statusLabel:'Notification expected Aug 2026',
+    fee:'₹850 (Gen/OBC) · ₹175 (SC/ST/PwBD)',
+    link:'https://www.ibps.in'
+  },
+  {
+    id:'sbi-po', category:'banking', stamp:'SBI',
+    name:'SBI Probationary Officer', body:'State Bank of India (SBI)',
+    level:'National', posts:'Probationary Officer, SBI branches nationwide',
+    vacancies:'1,500 vacancies (1,446 regular + 54 backlog)',
+    eligibility:"Graduation in any discipline (final-year candidates may apply provisionally). Age 21–30 as of the cut-off date. Selection: Prelims → Mains → Group Exercise & Interview.",
+    dates:[['Notification released','18 Jun 2026'],['Applications close','8 Jul 2026'],['Prelims','Aug 2026 (tentative)']],
+    status:'closing', statusLabel:'Closing soon · 8 Jul 2026',
+    fee:'₹750 (Gen/OBC/EWS) · exempt for SC/ST/PwBD',
+    link:'https://sbi.co.in/web/careers'
+  },
+  {
+    id:'rrb-ntpc', category:'railways', stamp:'NTPC',
+    name:'RRB NTPC (Graduate & Undergraduate)', body:'Railway Recruitment Boards (RRB)',
+    level:'National', posts:'Station Master, Goods Train Manager, Junior Clerk, Commercial-cum-Ticket Clerk & more',
+    vacancies:'8,868 vacancies (5,810 graduate + 3,058 undergraduate)',
+    eligibility:"Graduate posts: bachelor's degree, age 18–36. Undergraduate posts: 12th pass, age 18–33. Four-stage selection: CBT 1, CBT 2, skill/aptitude test, document verification.",
+    dates:[['Graduate CBT 1','16–27 Mar 2026 — held'],['Undergraduate CBT 1','7 May – 21 Jun 2026 — held'],['Graduate CBT 2','10 Jul 2026']],
+    status:'upcoming', statusLabel:'CBT 2 (Graduate): 10 Jul 2026',
+    fee:'₹500 (₹400 refundable on appearing) · ₹250 for women/SC/ST/PwD/ex-servicemen',
+    link:'https://www.rrbapply.gov.in'
+  },
+  {
+    id:'afcat', category:'defence', stamp:'AFC',
+    name:'Air Force Common Admission Test (AFCAT 2)', body:'Indian Air Force (IAF)',
+    level:'National', posts:'Flying Branch and Ground Duty (Technical / Non-Technical) commissions',
+    vacancies:'Announced with each notification',
+    eligibility:'Age 20–24 (Flying Branch), 20–26 (Ground Duty). Graduation with 60% marks; specific stream requirements for Technical branch. Written exam → AFSB interview → medical.',
+    dates:[['Registration','20 May – 19 Jun 2026'],['Written exam','23 Aug 2026 (expected)']],
+    status:'upcoming', statusLabel:'Exam: ~23 Aug 2026',
+    fee:'₹550 + GST',
+    link:'https://afcat.cdac.in'
+  },
+  {
+    id:'tnpsc-g1', category:'state', stamp:'G1',
+    name:'TNPSC Group 1 — Combined Civil Services Exam I', body:'Tamil Nadu Public Service Commission (TNPSC)',
+    level:'State (Tamil Nadu)', posts:'Deputy Collector, Deputy Superintendent of Police, District Registrar & other Class I/II posts',
+    vacancies:'Expected 80–170, based on recent cycles',
+    eligibility:"Any degree from a recognised university. Age typically 21–34 (post-dependent). Three stages: Prelims (qualifying) → Mains → Oral test.",
+    dates:[['Notification released','30 Jun 2026'],['Applications close','29 Jul 2026'],['Prelims','6 Sep 2026'],['Mains','Chennai only — date with results']],
+    status:'open', statusLabel:'Applications open · closes 29 Jul',
+    fee:'₹150 (₹100 exam fee + ₹50 registration) · exempt for SC/ST/MBC/DC/BC/destitute widows',
+    link:'https://www.tnpsc.gov.in'
+  },
+  {
+    id:'tnpsc-g2', category:'state', stamp:'G2',
+    name:'TNPSC Group 2 & 2A — Combined Civil Services Exam II', body:'Tamil Nadu Public Service Commission (TNPSC)',
+    level:'State (Tamil Nadu)', posts:'Assistant Section Officer, Sub-Registrar, Assistant Inspector of Labour & more',
+    vacancies:'Announced with the detailed notification',
+    eligibility:"Any degree from a recognised university. Age limits vary by post; standard TNPSC relaxations apply.",
+    dates:[['Notification','Per Annual Planner'],['Exam','25 Oct 2026']],
+    status:'expected', statusLabel:'Exam: 25 Oct 2026',
+    fee:'₹150 · exempt for SC/ST/MBC/DC/BC/destitute widows',
+    link:'https://www.tnpsc.gov.in'
+  },
+  {
+    id:'tnpsc-g4', category:'state', stamp:'G4',
+    name:'TNPSC Group 4 — Combined Civil Services Exam IV', body:'Tamil Nadu Public Service Commission (TNPSC)',
+    level:'State (Tamil Nadu)', posts:'Village Administrative Officer, Junior Assistant, Typist, Steno-Typist, Forest Guard & more',
+    vacancies:'Announced with the detailed notification',
+    eligibility:'SSLC / 10th pass (or equivalent) from a recognised board. Age 18–30 generally; 21+ for Village Administrative Officer.',
+    dates:[['Notification','Expected 6 Oct 2026'],['Applications close','5 Nov 2026 (expected)'],['Exam','20 Dec 2026']],
+    status:'expected', statusLabel:'Notification expected 6 Oct 2026',
+    fee:'₹100 · exempt for SC/ST/MBC/DC/BC/destitute widows',
+    link:'https://www.tnpsc.gov.in'
+  },
+  {
+    id:'jee-main', category:'entrance', stamp:'JEE',
+    name:'JEE Main 2027', body:'National Testing Agency (NTA)',
+    level:'National', posts:'Admission to B.E./B.Tech at NITs, IIITs, GFTIs — and qualifier for JEE Advanced (IITs)',
+    vacancies:'—',
+    eligibility:'Passed 12th (2025/2026) or appearing in 2027 with Physics, Chemistry, Maths. No upper age limit.',
+    dates:[['Notification','Expected late Oct 2026'],['Session 1','Last week of Jan 2027 (expected)'],['Session 2','Early Apr 2027 (expected)']],
+    status:'expected', statusLabel:'Notification expected Oct 2026',
+    fee:'Varies by category and number of sections',
+    link:'https://jeemain.nta.nic.in'
+  },
+  {
+    id:'neet-ug', category:'entrance', stamp:'NEET',
+    name:'NEET UG 2027', body:'National Testing Agency (NTA)',
+    level:'National', posts:'Admission to MBBS, BDS, AYUSH, veterinary & nursing courses nationwide',
+    vacancies:'—',
+    eligibility:'12th pass with Physics, Chemistry, Biology. Minimum age 17 as of 31 Dec of the admission year.',
+    dates:[['Notification','Expected Feb 2027'],['Exam','Expected first week of May 2027']],
+    status:'expected', statusLabel:'Notification expected Feb 2027',
+    fee:'Varies by category',
+    link:'https://neet.nta.nic.in'
+  },
+  {
+    id:'gate', category:'entrance', stamp:'GATE',
+    name:'GATE 2027', body:'IIT Madras (rotating host institute)',
+    level:'National', posts:"Admission to M.Tech/PhD programmes and direct recruitment at PSUs (ONGC, NTPC, BHEL, DRDO, ISRO & more)",
+    vacancies:'—',
+    eligibility:'3rd-year or higher undergraduates, or graduates, in Engineering/Technology/Architecture/Science/Commerce/Arts. No age limit. Up to 2 papers may be attempted.',
+    dates:[['Notification','Expected first week of Jul 2026'],['Registration','Aug–Sep 2026 (expected)'],['Exam','6, 7, 13 & 14 Feb 2027 (tentative)']],
+    status:'expected', statusLabel:'Notification expected this month',
+    fee:'₹1,000 (women/SC/ST/PwD) · ₹2,000 (others)',
+    link:'https://gate.iitm.ac.in'
+  },
+  {
+    id:'cat', category:'entrance', stamp:'CAT',
+    name:'CAT 2026', body:'Indian Institutes of Management (IIM, rotating host)',
+    level:'National', posts:'Admission to MBA/PGP programmes at the IIMs and 1,000+ B-schools',
+    vacancies:'—',
+    eligibility:"Bachelor's degree with 50% marks (General/OBC/EWS) or 45% (SC/ST/PwD). Final-year students may apply.",
+    dates:[['Notification','Expected Jul 2026'],['Exam','~29 Nov 2026 (expected, Sunday)']],
+    status:'expected', statusLabel:'Notification expected this month',
+    fee:'₹2,400 (Gen/OBC/EWS) · ₹1,200 (SC/ST/PwD)',
+    link:'https://iimcat.ac.in'
+  },
+  {
+    id:'clat', category:'entrance', stamp:'CLAT',
+    name:'CLAT 2027', body:'Consortium of National Law Universities',
+    level:'National', posts:'5-year integrated law programmes (BA LLB etc.) at 26+ National Law Universities',
+    vacancies:'—',
+    eligibility:'12th pass with 45% marks (General/OBC/PWD/NRI/OCI) or 40% (SC/ST). Students appearing in 12th in Mar/Apr 2027 are also eligible. No upper age limit.',
+    dates:[['Registration','Expected to open Aug 2026'],['Exam','Expected Dec 2026, offline mode']],
+    status:'expected', statusLabel:'Registration expected Aug 2026',
+    fee:'Around ₹4,000 (Gen) · concession for SC/ST/BPL',
+    link:'https://consortiumofnlus.ac.in'
+  },
+  {
+    id:'cuet-ug', category:'entrance', stamp:'CUET',
+    name:'CUET UG 2026', body:'National Testing Agency (NTA)',
+    level:'National', posts:'Single-window admission to central, state, private & deemed university UG programmes',
+    vacancies:'—',
+    eligibility:'12th pass or appearing, any stream. Subject combinations chosen at registration determine eligible programmes.',
+    dates:[['Notification released','3 Jan 2026'],['Exam window','11–31 May 2026 (plus rescheduled slots to 7 Jun)'],['Next cycle','CUET UG 2027 notification expected ~Jan 2027']],
+    status:'result', statusLabel:'2026 cycle complete',
+    fee:'Varies by number of subjects chosen',
+    link:'https://cuet.nta.nic.in'
+  },
+  {
+    id:'ctet', category:'teaching', stamp:'CTET',
+    name:'Central Teacher Eligibility Test (CTET)', body:'Central Board of Secondary Education (CBSE)',
+    level:'National', posts:'Eligibility for teaching posts, Classes I–VIII, in central government schools',
+    vacancies:'—',
+    eligibility:'Paper I (Classes I–V): 12th + 2-year Diploma in Elementary Education (or equivalent). Paper II (Classes VI–VIII): graduation + B.Ed (or equivalent). Candidates may sit both papers.',
+    dates:[['February 2026 session','Held on 8 Feb 2026'],['Next session','Date to be announced']],
+    status:'result', statusLabel:'Next session TBA',
+    fee:'₹1,000 (one paper) · ₹1,200 (both papers), General/OBC',
+    link:'https://ctet.nic.in'
+  },
+];
+ 
+/* ============================= HELPERS ============================= */
+const STATUS_LABELS = {
+  open: 'Applications Open',
+  closing: 'Closing Soon',
+  upcoming: 'Exam Upcoming',
+  expected: 'Notification Expected',
+  result: 'Cycle Update'
+};
+ 
+function catMeta(id){ return CATEGORIES.find(c => c.id === id); }
+ 
+/* ============================= RENDER: HERO TICKER ============================= */
+const TICKER_IDS = ['ibps-po','sbi-po','tnpsc-g1','rrb-ntpc','gate','cat'];
+function renderTicker(){
+  const el = document.getElementById('ticker');
+  el.innerHTML = TICKER_IDS.map(id => {
+    const ex = EXAMS.find(e => e.id === id);
+    const cm = catMeta(ex.category);
+    return `<div class="flap">
+      <div class="fl-cat">${cm.code}</div>
+      <div class="fl-name">${ex.stamp} — ${shortName(ex.name)}</div>
+      <div class="fl-date">${ex.statusLabel.split('·').pop().trim()}</div>
+      <div class="fl-status st-${ex.status}">${STATUS_LABELS[ex.status]}</div>
+    </div>`;
+  }).join('');
+}
+function shortName(n){
+  return n.length > 30 ? n.slice(0,28) + '…' : n;
+}
+ 
+/* ============================= RENDER: CHIPS ============================= */
+let activeCat = 'all';
+let searchTerm = '';
+ 
+function renderChips(){
+  const el = document.getElementById('chips');
+  const counts = {};
+  EXAMS.forEach(e => counts[e.category] = (counts[e.category]||0)+1);
+  const all = [{id:'all', code:'ALL', label:'All exams'}, ...CATEGORIES];
+  el.innerHTML = all.map(c => {
+    const n = c.id === 'all' ? EXAMS.length : (counts[c.id]||0);
+    return `<button class="chip ${activeCat===c.id?'active':''}" data-cat="${c.id}">${c.label} (${n})</button>`;
+  }).join('');
+  el.querySelectorAll('.chip').forEach(btn => {
+    btn.addEventListener('click', () => {
+      activeCat = btn.dataset.cat;
+      renderChips();
+      renderBoard();
+    });
+  });
+}
+ 
+/* ============================= RENDER: BOARD ============================= */
+function renderBoard(){
+  const board = document.getElementById('board');
+  const term = searchTerm.trim().toLowerCase();
+ 
+  const cats = activeCat === 'all' ? CATEGORIES : CATEGORIES.filter(c => c.id === activeCat);
+  let html = '';
+  let totalShown = 0;
+ 
+  cats.forEach(cat => {
+    const items = EXAMS.filter(e => {
+      if (e.category !== cat.id) return false;
+      if (!term) return true;
+      return (e.name + ' ' + e.body + ' ' + e.stamp).toLowerCase().includes(term);
+    });
+    if (items.length === 0) return;
+    totalShown += items.length;
+ 
+    html += `<section class="cat-section" id="${cat.id}">
+      <div class="cat-head">
+        <span class="cat-code">${cat.code}</span>
+        <h2>${cat.label}</h2>
+        <span class="cat-blurb">${cat.blurb}</span>
+      </div>
+      <div class="exam-list">
+        ${items.map(examCardHTML).join('')}
+      </div>
+    </section>`;
+  });
+ 
+  if (totalShown === 0){
+    html = `<div class="empty-state">No exams match “${searchTerm}”. Try a different search or clear the filter.</div>`;
+  }
+ 
+  board.innerHTML = html;
+  attachCardEvents();
+}
+ 
+function examCardHTML(ex){
+  return `<article class="exam-card" data-id="${ex.id}">
+    <div class="exam-row">
+      <div class="exam-stamp">${ex.stamp}</div>
+      <div class="exam-main">
+        <p class="ex-name">${ex.name}</p>
+        <p class="ex-body">${ex.body} · ${ex.level}</p>
+      </div>
+      <div class="exam-meta">
+        <span class="badge st-${ex.status}">${STATUS_LABELS[ex.status]}</span>
+        <span class="ex-date">${ex.statusLabel}</span>
+      </div>
+      <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="exam-detail">
+      <div class="exam-detail-inner">
+        <div class="detail-block">
+          <h4>Posts &amp; Eligibility</h4>
+          <p><strong>${ex.posts}</strong></p>
+          <p style="margin-top:8px;">${ex.eligibility}</p>
+        </div>
+        <div class="detail-block">
+          <h4>Key Dates</h4>
+          <table class="date-table">
+            ${ex.dates.map(d => `<tr><td>${d[0]}</td><td>${d[1]}</td></tr>`).join('')}
+          </table>
+        </div>
+        <div class="detail-foot">
+          <span class="fee-note">Fee: ${ex.fee}${ex.vacancies && ex.vacancies !== '—' ? ' · ' + ex.vacancies : ''}</span>
+          <a class="official-link" href="${ex.link}" target="_blank" rel="noopener">
+            Official website
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </article>`;
+}
+ 
+function attachCardEvents(){
+  document.querySelectorAll('.exam-card').forEach(card => {
+    const row = card.querySelector('.exam-row');
+    const detail = card.querySelector('.exam-detail');
+    row.addEventListener('click', () => {
+      const isOpen = card.classList.contains('open');
+      if (isOpen){
+        detail.style.maxHeight = null;
+        card.classList.remove('open');
+      } else {
+        card.classList.add('open');
+        detail.style.maxHeight = detail.scrollHeight + 'px';
+      }
+    });
+  });
+}
+ 
+/* ============================= FOOTER CATEGORY LINKS ============================= */
+function renderFootCats(){
+  const el = document.getElementById('footCats');
+  el.innerHTML = CATEGORIES.map(c => `<a href="#${c.id}">${c.label}</a>`).join('');
+}
+ 
+/* ============================= SEARCH ============================= */
+document.getElementById('searchInput').addEventListener('input', (e) => {
+  searchTerm = e.target.value;
+  renderBoard();
+});
+ 
+/* ============================= INIT ============================= */
+document.getElementById('statExams').textContent = EXAMS.length;
+renderTicker();
+renderChips();
+renderBoard();
+renderFootCats();
+</script>
+</body>
+</html>
